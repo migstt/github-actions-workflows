@@ -1,0 +1,33 @@
+# CONTINUOUS DEPLOYMENT FOR MY LARAVEL APP
+
+name: Deploy to Production
+run-name: Deploy Changes to Production
+
+
+on: 
+  push:
+    branches:
+      - production
+jobs:
+
+  deploy-to-ronins:
+    name: Deploy to Prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH and Deploy changes to Ronins Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          port: ${{ vars.PORT_SERVER }}
+          script: | 
+            cd mtrinidad.ronins.site
+            eval "$(ssh-agent)"
+            ssh-add ~/.ssh/mtrininidad-key
+            git pull origin production
+            /usr/local/php82/bin/php composer.phar install --no-dev --no-interaction
+            /usr/local/php82/bin/php artisan migrate --force
