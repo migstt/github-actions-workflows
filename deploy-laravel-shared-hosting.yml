@@ -1,8 +1,6 @@
-# CONTINUOUS DEPLOYMENT FOR MY LARAVEL APP
-
-name: Deploy to Production
-run-name: Deploy Changes to Production
-
+#migoy99
+name: Deploy to Production Server
+run-name: Deploy Changes to Ronins Server
 
 on: 
   push:
@@ -11,12 +9,14 @@ on:
 jobs:
 
   deploy-to-ronins:
-    name: Deploy to Prod
+    name: Deploy to Ronins server
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+#SHARED HOSTING DEPLOYMENT
+#PULL FROM FROM A PARTICULAR BRANCH e.g production
       - name: Set up SSH and Deploy changes to Ronins Server
         uses: appleboy/ssh-action@master
         with:
@@ -25,9 +25,14 @@ jobs:
           key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           port: ${{ vars.PORT_SERVER }}
           script: | 
-            cd mtrinidad.ronins.site
+            cd ${{ secrets.DEPLOYMENT_DIRECTORY }}
             eval "$(ssh-agent)"
-            ssh-add ~/.ssh/mtrininidad-key
-            git pull origin production
-            /usr/local/php82/bin/php composer.phar install --no-dev --no-interaction
+            ssh-add ${{ secrets.SSH_P_KEY_PATH }}
+            git pull origin ${{ vars.SOURCE_BRANCH_PULL }}
+            /usr/local/php82/bin/php composer.phar install --no-dev
             /usr/local/php82/bin/php artisan migrate --force
+
+
+#TBD
+#AUTOMATE RELEASES
+#AUTOMATE DEPLOYMENT OF RELEASES
