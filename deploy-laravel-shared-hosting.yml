@@ -1,11 +1,14 @@
-#migoy99
 name: Deploy to Production Server
 run-name: Deploy Changes to Ronins Server
-
+# tag based release test
+# v1.0.4
 on: 
-  push:
-    branches:
-      - production
+  # push:
+  #   branches:
+  #     - production
+  release:
+    types:
+      - created
 jobs:
 
   deploy-to-ronins:
@@ -15,8 +18,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-#SHARED HOSTING DEPLOYMENT
-#PULL FROM FROM A PARTICULAR BRANCH e.g production
       - name: Set up SSH and Deploy changes to Ronins Server
         uses: appleboy/ssh-action@master
         with:
@@ -24,15 +25,20 @@ jobs:
           username: ${{ secrets.PROD_SSH_USER }}
           key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
           port: ${{ vars.PORT_SERVER }}
-          script: | 
+
+          # BRANCH BASED DEPLOYMENT
+          # script: | 
+          #   cd ${{ secrets.DEPLOYMENT_DIRECTORY }}
+          #   eval "$(ssh-agent)"
+          #   ssh-add ${{ secrets.SSH_P_KEY_PATH }}
+          #   git pull origin ${{ vars.SOURCE_BRANCH_PULL }}
+          #   /usr/local/php82/bin/php composer.phar install --no-dev
+          #   /usr/local/php82/bin/php artisan migrate --force
+
+          # TAG BASED DEPLOYMENT
+          # Fetches and Checkouts the latest tag from remote repo
+          script: |
             cd ${{ secrets.DEPLOYMENT_DIRECTORY }}
-            eval "$(ssh-agent)"
-            ssh-add ${{ secrets.SSH_P_KEY_PATH }}
-            git pull origin ${{ vars.SOURCE_BRANCH_PULL }}
+            bash ${{ secrets.FETCH_CHECKOUT_TAG_SCRIPT_PATH }}
             /usr/local/php82/bin/php composer.phar install --no-dev
             /usr/local/php82/bin/php artisan migrate --force
-
-
-#TBD
-#AUTOMATE RELEASES
-#AUTOMATE DEPLOYMENT OF RELEASES
