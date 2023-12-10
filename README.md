@@ -1,6 +1,4 @@
-# CI/CD Templates Repository
-
-Welcome to the CI/CD My Templates Repository! 🚀
+# CI/CD Templates
 
 This repository is a collection of my YAML files for setting up Continuous Integration (CI) and Continuous Deployment (CD) workflows.
 
