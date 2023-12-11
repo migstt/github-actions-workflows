@@ -1,10 +1,12 @@
 name: PHPStan Analyze && PHPUnit Test
-run-name: PHPStan Analyze and PHPUnit Test
 
 on:
   push:
     branches:
       - develop
+  # push:
+  #   branches:
+  #     - production
 
 jobs:
 
@@ -70,3 +72,17 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
+
+
+  # If PHPSTAN and PHPUNIT succeeds, branch "develop" will be merged to branch "production"
+  # merge-develop-to-prod: 
+  #   needs: [phpstan-analyze, phpunit-test]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: everlytic/branch-merge@1.1.2
+  #       with:
+  #         github_token: ${{ secrets.GH_TOKEN }}
+  #         source_ref: "develop"
+  #         target_branch: "production"
+  #         commit_message_template: "[Automated] Merged {source_ref} into {target_branch}"
