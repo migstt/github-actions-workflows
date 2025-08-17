@@ -1,9 +1,19 @@
-# CI/CD Templates
+## Overview
 
-This repository is a collection of my YAML files for setting up Continuous Integration (CI) and Continuous Deployment (CD) workflows.
+This repository contains reusable GitHub Actions workflows for common tasks such as building, testing, deploying, and releasing projects. The workflows are written in YAML and can be adapted for different applications.
 
-## What is CI/CD?
+## Workflows
 
-*CI (Continuous Integration)* is the practice of frequently integrating code changes into a shared repository. CI ensures that each code change is automatically built, tested, and validated, making it easier to catch and fix issues early in the development process.
+| File                                | Description                                   |
+|-------------------------------------|-----------------------------------------------|
+| auto-merge.yml                      | Merges the develop branch into prod           |
+| build-deploy-jekyll-gh-pages.yml    | Builds and deploys Jekyll to GitHub Pages     |
+| deploy-laravel-shared-hosting.yml   | Deploys Laravel applications to shared hosting|
+| deploy-nextjs-static-to-server.yml  | Deploys a static Next.js build to a server    |
+| release.yml                         | Creates GitHub releases                       |
+| test-laravel.yml                    | Runs PHPStan and PHPUnit tests for Laravel    |
 
-*CD (Continuous Deployment/Delivery)* extends CI by automating the deployment of code to different environments, such as staging and production. CD ensures that changes can be released to end-users quickly and reliably.
+## Notes
+
+- All workflows are written in YAML.
+- `.gitattributes` is used to specify file handling for YAML files.
